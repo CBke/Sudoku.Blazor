@@ -1,0 +1,71 @@
+﻿@page "/"
+@using Sudoku.Models
+@using Sudoku.Extensions
+
+<PageTitle>Index</PageTitle>
+<style>
+    table.board {
+        border-collapse: collapse;
+    }
+
+        table.board tr td {
+            border: 1px solid #d3d3d3;
+            margin: 0px;
+            padding: 7px;
+        }
+
+            table.board tr td:nth-child(3n-3) {
+                border-right: 1px solid black;
+            }
+
+            table.board tr td:nth-child(3n-2) {
+                border-left: 1px solid black;
+            }
+
+        table.board tr:nth-child(3n-3) td {
+            border-bottom: 1px solid black;
+        }
+
+        table.board tr:nth-child(3n-2) td {
+            border-top: 1px solid black;
+        }
+
+        table.board tr td input {
+            width: 18px;
+            outline: none;
+            border: none;
+        }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
+<table class="board">
+    <tbody>
+        @foreach (var y in Enumerable.Range(0, 9))
+        {
+            <tr>
+                @foreach (var x in Enumerable.Range(0, 9))
+                {
+                    <td>
+                        <input pattern="[1-9]" value="@Sudoku.Cells[y * 9 + x].Value" @onchange="@(e => Sudoku.SetValue(e.Value?.ToString(), y * 9 + x))" />
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button @onclick="@(() => Sudoku.Solve())" type="button">Solve</button>
+
+<button @onclick="@(() => Sudoku = new Sudoku() )" type="button">Reset</button>
+
+@code
+{
+
+    private Sudoku Sudoku { get; set; } = new();
+
+}
